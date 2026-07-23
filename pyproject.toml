@@ -7,7 +7,7 @@ name = "photo-archive-manager"
 version = "0.1.0"
 description = "A tool for importing, organizing and managing a photo archive."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = { file = "LICENSE" }
 authors = [
     { name = "Mads Fog Albrechtslund" }
