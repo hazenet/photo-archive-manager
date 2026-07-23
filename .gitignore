@@ -216,3 +216,34 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# -----------------------------------------------------------------------------
+# macOS
+# -----------------------------------------------------------------------------
+
+# Finder
+.DS_Store
+.DS_Store?
+.LSOverride
+
+# AppleDouble files
+._*
+
+# Spotlight
+.Spotlight-V100
+
+# Trash
+.Trashes
+
+# Files that might appear on external or network volumes
+.DocumentRevisions-V100
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+
+# AppleScript bundles
+*.scptd
+
+# BBEdit backup files
+*~
+*.bak
