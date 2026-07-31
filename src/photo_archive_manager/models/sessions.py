@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -11,6 +9,7 @@ from photo_archive_manager.models.results import (
     ImportResult,
     RenameResult,
 )
+
 
 @dataclass(slots=True)
 class ExecutionSession:
@@ -190,9 +189,7 @@ class ImportSession:
     @property
     def succeeded(self) -> bool:
         return (
-            not self.has_errors
-            and self.failed_count == 0
-            and self.conflict_count == 0
+            not self.has_errors and self.failed_count == 0 and self.conflict_count == 0
         )
 
     @property

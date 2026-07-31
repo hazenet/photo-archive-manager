@@ -1,17 +1,11 @@
-#!/usr/bin/env python3
-
-from pathlib import Path
 import subprocess
+from pathlib import Path
 
 
-def choose_folder(
-) -> Path:
+def choose_folder() -> Path:
     """Display the native macOS folder picker."""
 
-    applescript = (
-        'POSIX path of (choose folder '
-        'with prompt "Select folder to rename")'
-    )
+    applescript = 'POSIX path of (choose folder with prompt "Select folder to rename")'
 
     result = subprocess.run(
         ["osascript", "-e", applescript],

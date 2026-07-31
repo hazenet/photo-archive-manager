@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Models representing issues discovered during processing."""
 
 from dataclasses import dataclass

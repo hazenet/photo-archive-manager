@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -8,6 +6,7 @@ from pathlib import Path
 @dataclass(slots=True)
 class PhotoFile:
     """Represents a photo being processed by PAM."""
+
     file_path: Path
     associated_paths: list[Path] = field(default_factory=list)
     capture_datetime: datetime | None = None

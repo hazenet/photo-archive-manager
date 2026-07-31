@@ -1,11 +1,8 @@
-#!/usr/bin/env python3
-
 import shutil
 import sys
 
 
-def check_dependencies(
-) -> None:
+def check_dependencies() -> None:
     """Verify that required external programs are installed."""
 
     if shutil.which("exiftool") is None:

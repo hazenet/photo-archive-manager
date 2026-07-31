@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Functions for presenting information to the user."""
 
 from __future__ import annotations
@@ -58,11 +56,7 @@ def print_rename_preview(
         if photo.new_filename is None:
             continue
 
-        print(
-            f"{photo.filename}"
-            f"  ->  "
-            f"{photo.new_filename}"
-        )
+        print(f"{photo.filename}  ->  {photo.new_filename}")
 
     print()
 

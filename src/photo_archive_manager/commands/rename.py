@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Rename photo files in a selected folder."""
 
 from photo_archive_manager.core.dependencies import check_dependencies
@@ -14,7 +12,7 @@ from photo_archive_manager.core.planning_rename import (
     generate_new_filenames,
     group_files_by_timestamp,
 )
-from photo_archive_manager.core.validation import validate_renames
+from photo_archive_manager.core.validation_rename import validate_renames
 from photo_archive_manager.utils.dialogs import choose_folder
 from photo_archive_manager.utils.reporting import (
     print_completion_summary,

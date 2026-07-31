@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Command-line interface entry point for Photo Archive Manager."""
 
 from __future__ import annotations

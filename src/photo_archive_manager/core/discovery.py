@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from datetime import datetime
 from pathlib import Path
 
@@ -12,15 +10,10 @@ from photo_archive_manager.constants import (
 from photo_archive_manager.models import PhotoFile
 
 
-def is_supported_file(
-    file_path: Path
-) -> bool:
+def is_supported_file(file_path: Path) -> bool:
     """Return True if the file type is supported."""
 
-    return (
-        file_path.is_file()
-        and file_path.suffix.lower() in SUPPORTED_EXTENSIONS
-    )
+    return file_path.is_file() and file_path.suffix.lower() in SUPPORTED_EXTENSIONS
 
 
 def is_already_renamed(file_path: Path) -> bool:
@@ -37,7 +30,6 @@ def find_associated_files(
     associated_files: list[Path] = []
 
     for associated_extension in ASSOCIATED_EXTENSIONS:
-
         associated_path = file_path.with_suffix(associated_extension)
 
         if associated_path.is_file():
@@ -54,7 +46,6 @@ def find_supported_files(
     supported_files: list[PhotoFile] = []
 
     for file_path in sorted(selected_root_folder.iterdir()):
-
         if not is_supported_file(file_path):
             continue
 
@@ -62,9 +53,7 @@ def find_supported_files(
             PhotoFile(
                 file_path=file_path,
                 associated_paths=find_associated_files(file_path),
-                include_original_filename=should_include_original_filename(
-                    file_path
-                ),
+                include_original_filename=should_include_original_filename(file_path),
             )
         )
 
@@ -79,13 +68,10 @@ def read_existing_sequences(
     existing_sequences: dict[datetime, int] = {}
 
     for photo_file in photo_files:
-
         match = RENAMED_PATTERN.match(photo_file.file_path.name)
 
         if match is None:
-            raise ValueError(
-                f"Unexpected filename: {photo_file.file_path.name}"
-            )
+            raise ValueError(f"Unexpected filename: {photo_file.file_path.name}")
 
         capture_datetime = datetime.strptime(
             match.group("timestamp"),
@@ -115,8 +101,7 @@ def should_include_original_filename(
     stem = file_path.stem
 
     return not any(
-        pattern.match(stem)
-        for pattern in EXCLUDE_ORIGINAL_FILENAME_PATTERNS
+        pattern.match(stem) for pattern in EXCLUDE_ORIGINAL_FILENAME_PATTERNS
     )
 
 
@@ -129,7 +114,6 @@ def split_files_by_rename_status(
     needs_rename: list[PhotoFile] = []
 
     for photo_file in supported_files:
-
         if is_already_renamed(photo_file.file_path):
             already_renamed.append(photo_file)
         else:

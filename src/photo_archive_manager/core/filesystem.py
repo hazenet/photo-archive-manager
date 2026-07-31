@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from pathlib import Path
 
 from photo_archive_manager.models import PhotoFile
@@ -11,7 +9,6 @@ def rename_files(
     """Rename all files according to the generated rename plan."""
 
     for photo_file in photo_files:
-
         #
         # Rename the primary file.
         #
@@ -30,10 +27,8 @@ def rename_files(
         renamed_associated_paths: list[Path] = []
 
         for associated_path in photo_file.associated_paths:
-
             associated_destination = associated_path.with_name(
-                photo_file.destination_stem
-                + associated_path.suffix
+                photo_file.destination_stem + associated_path.suffix
             )
 
             associated_path.rename(

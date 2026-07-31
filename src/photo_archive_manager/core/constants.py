@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Shared constants used throughout Photo Archive Manager."""
 
 import re
@@ -81,10 +79,6 @@ EXCLUDE_ORIGINAL_FILENAME_PATTERNS = (
 # Output filename formats
 # ---------------------------------------------------------------------------
 
-FILENAME_FORMAT = (
-    "{timestamp}_{sequence:03d} - {original_filename}"
-)
+FILENAME_FORMAT = "{timestamp}_{sequence:03d} - {original_filename}"
 
-FILENAME_FORMAT_NO_ORIGINAL = (
-    "{timestamp}_{sequence:03d}{extension}"
-)
+FILENAME_FORMAT_NO_ORIGINAL = "{timestamp}_{sequence:03d}{extension}"

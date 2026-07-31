@@ -15,3 +15,8 @@ authors = [
 
 [project.scripts]
 pam = "photo_archive_manager.cli:main"
+
+[tool.ruff.lint]
+ignore = [
+    "DTZ007",
+]

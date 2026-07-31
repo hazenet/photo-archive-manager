@@ -1,9 +1,6 @@
-#!/usr/bin/env python3
-
 import json
 import subprocess
 from datetime import datetime
-
 
 from photo_archive_manager.constants import TIMESTAMP_FIELDS
 from photo_archive_manager.models import PhotoFile
@@ -24,10 +21,7 @@ def _get_exif_json(
         "-m",
     ]
 
-    command.extend(
-        str(photo_file.file_path)
-        for photo_file in photo_files
-    )
+    command.extend(str(photo_file.file_path) for photo_file in photo_files)
 
     result = subprocess.run(
         command,
@@ -39,9 +33,7 @@ def _get_exif_json(
     return json.loads(result.stdout)
 
 
-def read_capture_datetimes(
-    photo_files: list[PhotoFile]
-) -> None:
+def read_capture_datetimes(photo_files: list[PhotoFile]) -> None:
     """Read capture timestamps for all files."""
 
     exif_data_list = _get_exif_json(photo_files)
@@ -51,9 +43,7 @@ def read_capture_datetimes(
         exif_data_list,
         strict=True,
     ):
-
         for field_name in TIMESTAMP_FIELDS:
-
             timestamp_string = exif_data.get(field_name)
 
             if timestamp_string is None:
@@ -62,7 +52,6 @@ def read_capture_datetimes(
             timestamp_string = timestamp_string[:19]
 
             try:
-
                 photo_file.capture_datetime = datetime.strptime(
                     timestamp_string,
                     "%Y:%m:%d %H:%M:%S",
@@ -74,8 +63,6 @@ def read_capture_datetimes(
                 continue
 
         if photo_file.capture_datetime is None:
-
             raise ValueError(
-                f"No usable capture timestamp found in "
-                f"'{photo_file.file_path.name}'."
+                f"No usable capture timestamp found in '{photo_file.file_path.name}'."
             )
