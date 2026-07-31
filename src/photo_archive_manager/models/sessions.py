@@ -6,8 +6,11 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from .issues import ValidationIssue
-from .results import RenameResult
+from photo_archive_manager.models.issues import ValidationIssue
+from photo_archive_manager.models.results import (
+    ImportResult,
+    RenameResult,
+)
 
 @dataclass(slots=True)
 class ExecutionSession:

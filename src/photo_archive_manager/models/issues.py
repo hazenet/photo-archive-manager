@@ -4,7 +4,7 @@
 
 from dataclasses import dataclass
 
-from .photo_file import PhotoFile
+from photo_archive_manager.models.photo_file import PhotoFile
 
 
 @dataclass(slots=True)

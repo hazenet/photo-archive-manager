@@ -2,6 +2,6 @@
 
 """Package entry point."""
 
-from .cli import main
+from photo_archive_manager.cli import main
 
 raise SystemExit(main())

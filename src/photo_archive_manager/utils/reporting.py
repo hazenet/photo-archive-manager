@@ -6,8 +6,10 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
-from ..models.issue import ValidationIssue
-from ..models.photo import PhotoFile
+from photo_archive_manager.models import (
+    PhotoFile,
+    ValidationIssue,
+)
 
 
 def print_discovery_summary(

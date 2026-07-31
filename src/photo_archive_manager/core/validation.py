@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
-from ..models.issue import ValidationIssue
-from ..models.photo import PhotoFile
+from photo_archive_manager.models import (
+    PhotoFile,
+    ValidationIssue,
+)
 
 
 def _add_validation_issue(

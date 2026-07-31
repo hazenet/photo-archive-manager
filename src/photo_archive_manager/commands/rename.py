@@ -2,21 +2,21 @@
 
 """Rename photo files in a selected folder."""
 
-from ..core.dependencies import check_dependencies
-from ..core.discovery import (
+from photo_archive_manager.core.dependencies import check_dependencies
+from photo_archive_manager.core.discovery import (
     find_supported_files,
     split_files_by_rename_status,
 )
-from ..core.exif import read_capture_datetimes
-from ..core.filesystem import rename_files
-from ..core.planning import (
+from photo_archive_manager.core.exif import read_capture_datetimes
+from photo_archive_manager.core.filesystem import rename_files
+from photo_archive_manager.core.planning_rename import (
     assign_sequence_numbers,
     generate_new_filenames,
     group_files_by_timestamp,
 )
-from ..core.validation import validate_renames
-from ..utils.dialogs import choose_folder
-from ..utils.reporting import (
+from photo_archive_manager.core.validation import validate_renames
+from photo_archive_manager.utils.dialogs import choose_folder
+from photo_archive_manager.utils.reporting import (
     print_completion_summary,
     print_discovery_summary,
     print_rename_preview,

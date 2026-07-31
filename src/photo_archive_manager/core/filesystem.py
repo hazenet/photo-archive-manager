@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from ..models.photo import PhotoFile
+from photo_archive_manager.models import PhotoFile
 
 
 def rename_files(

@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import argparse
 
-from .commands.rename import rename
+from photo_archive_manager.commands.rename import rename
 
 
 def build_parser() -> argparse.ArgumentParser:

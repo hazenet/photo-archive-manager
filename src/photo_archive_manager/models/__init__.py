@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
-from .photo_file import PhotoFile
-from .issues import ValidationIssue
-from .results import (
+from photo_archive_manager.models.photo_file import PhotoFile
+from photo_archive_manager.models.issues import ValidationIssue
+from photo_archive_manager.models.results import (
     RenameResult,
     RenameStatus,
     ImportResult,
     ImportStatus,
 )
-from .sessions import (
+from photo_archive_manager.models.sessions import (
     ExecutionSession,
     RenameSession,
     ImportSession,

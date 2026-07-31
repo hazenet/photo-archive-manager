@@ -2,11 +2,11 @@
 
 from datetime import datetime
 
-from .constants import (
+from photo_archive_manager.constants import (
     FILENAME_FORMAT,
     FILENAME_FORMAT_NO_ORIGINAL,
 )
-from ..models.photo import PhotoFile
+from photo_archive_manager.models import PhotoFile
 
 
 def group_files_by_timestamp(

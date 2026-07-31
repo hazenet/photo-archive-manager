@@ -3,13 +3,13 @@
 from datetime import datetime
 from pathlib import Path
 
-from .constants import (
+from photo_archive_manager.constants import (
     ASSOCIATED_EXTENSIONS,
     EXCLUDE_ORIGINAL_FILENAME_PATTERNS,
     RENAMED_PATTERN,
     SUPPORTED_EXTENSIONS,
 )
-from ..models.photo import PhotoFile
+from photo_archive_manager.models import PhotoFile
 
 
 def is_supported_file(

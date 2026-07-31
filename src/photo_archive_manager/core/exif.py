@@ -5,10 +5,8 @@ import subprocess
 from datetime import datetime
 
 
-from .constants import (
-    TIMESTAMP_FIELDS,
-)
-from ..models.photo import PhotoFile
+from photo_archive_manager.constants import TIMESTAMP_FIELDS
+from photo_archive_manager.models import PhotoFile
 
 
 def _get_exif_json(
