@@ -5,8 +5,9 @@ from datetime import datetime
 from pathlib import Path
 
 
-@dataclass(eq=False)
+@dataclass(slots=True)
 class PhotoFile:
+    """Represents a photo being processed by PAM."""
     file_path: Path
     associated_paths: list[Path] = field(default_factory=list)
     capture_datetime: datetime | None = None
@@ -38,12 +39,10 @@ class PhotoFile:
         """Return the original filename including its extension."""
         return self.file_path.name
 
-
     @property
     def stem(self) -> str:
         """Return the original filename without its extension."""
         return self.file_path.stem
-
 
     @property
     def suffix(self) -> str:

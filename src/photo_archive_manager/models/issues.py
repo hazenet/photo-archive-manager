@@ -4,17 +4,12 @@
 
 from dataclasses import dataclass
 
-from .photo import PhotoFile
+from .photo_file import PhotoFile
 
 
-@dataclass
+@dataclass(slots=True)
 class ValidationIssue:
     """Represents a validation issue for a photo file."""
 
-    photo_file: PhotoFile
+    file: PhotoFile
     message: str
-
-    def __str__(self) -> str:
-        """Return the validation message."""
-
-        return self.message
