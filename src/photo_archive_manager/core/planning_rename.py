@@ -16,7 +16,8 @@ def group_files_by_timestamp(
 
     for photo_file in photo_files:
         if photo_file.capture_datetime is None:
-            raise ValueError("capture_datetime has not been assigned.")
+            continue
+
         capture_datetime = photo_file.capture_datetime
 
         timestamp_groups.setdefault(
@@ -55,9 +56,9 @@ def generate_new_filenames(
 
     for photo_file in photo_files:
         if photo_file.capture_datetime is None:
-            raise ValueError("capture_datetime has not been assigned.")
+            continue
         if photo_file.sequence_number is None:
-            raise ValueError("sequence_number has not been assigned.")
+            continue
 
         timestamp = photo_file.capture_datetime.strftime("%Y-%m-%d_%H-%M-%S")
 

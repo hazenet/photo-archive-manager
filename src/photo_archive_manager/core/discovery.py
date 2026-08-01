@@ -71,7 +71,7 @@ def read_existing_sequences(
         match = RENAMED_PATTERN.match(photo_file.file_path.name)
 
         if match is None:
-            raise ValueError(f"Unexpected filename: {photo_file.file_path.name}")
+            continue
 
         capture_datetime = datetime.strptime(
             match.group("timestamp"),

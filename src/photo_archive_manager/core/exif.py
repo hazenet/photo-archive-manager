@@ -61,8 +61,3 @@ def read_capture_datetimes(photo_files: list[PhotoFile]) -> None:
 
             except ValueError:
                 continue
-
-        if photo_file.capture_datetime is None:
-            raise ValueError(
-                f"No usable capture timestamp found in '{photo_file.file_path.name}'."
-            )

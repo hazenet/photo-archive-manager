@@ -29,8 +29,33 @@ def validate_renames(
     reported_collision_files: set[PhotoFile] = set()
 
     for photo_file in photo_files:
+        #
+        # Validate required planning data.
+        #
+
+        if photo_file.capture_datetime is None:
+            _add_validation_issue(
+                issues,
+                photo_file,
+                "Capture timestamp could not be determined.",
+            )
+            continue
+
+        if photo_file.sequence_number is None:
+            _add_validation_issue(
+                issues,
+                photo_file,
+                "Sequence number has not been assigned.",
+            )
+            continue
+
         if photo_file.new_filename is None:
-            raise ValueError("new_filename has not been assigned.")
+            _add_validation_issue(
+                issues,
+                photo_file,
+                "New filename has not been generated.",
+            )
+            continue
 
         #
         # Check for generated filename collisions.
@@ -51,9 +76,7 @@ def validate_renames(
                     f"Generated filename collision with '{photo_file.file_path.name}'.",
                 )
 
-                reported_collision_files.add(
-                    existing_photo_file,
-                )
+                reported_collision_files.add(existing_photo_file)
 
             _add_validation_issue(
                 issues,

@@ -1,47 +1,55 @@
-from pathlib import Path
-
-from photo_archive_manager.models import PhotoFile
+from photo_archive_manager.models import (
+    PhotoFile,
+    RenameResult,
+    RenameStatus,
+)
 
 
 def rename_files(
     photo_files: list[PhotoFile],
-) -> None:
-    """Rename all files according to the generated rename plan."""
+    *,
+    dry_run: bool = False,
+) -> list[RenameResult]:
+    """Rename the supplied photo files."""
 
-    for photo_file in photo_files:
-        #
-        # Rename the primary file.
-        #
+    results: list[RenameResult] = []
 
-        source_path = photo_file.file_path
-        destination_path = photo_file.destination_path
+    for photo in photo_files:
 
-        source_path.rename(
-            destination_path,
-        )
+        original_path = photo.path
+        destination_path = photo.destination_path
 
-        #
-        # Rename associated files.
-        #
+        try:
 
-        renamed_associated_paths: list[Path] = []
+            if not dry_run:
+                original_path.rename(destination_path)
 
-        for associated_path in photo_file.associated_paths:
-            associated_destination = associated_path.with_name(
-                photo_file.destination_stem + associated_path.suffix
+                #
+                # Keep the PhotoFile in sync with the filesystem.
+                #
+
+                photo.path = destination_path
+
+            results.append(
+                RenameResult(
+                    photo=photo,
+                    original_path=original_path,
+                    destination_path=destination_path,
+                    status=RenameStatus.RENAMED,
+                )
             )
 
-            associated_path.rename(
-                associated_destination,
+        except Exception as ex:
+
+            results.append(
+                RenameResult(
+                    photo=photo,
+                    original_path=original_path,
+                    destination_path=destination_path,
+                    status=RenameStatus.FAILED,
+                    message=str(ex),
+                    exception=ex,
+                )
             )
 
-            renamed_associated_paths.append(
-                associated_destination,
-            )
-
-        #
-        # Keep the model synchronized with the filesystem.
-        #
-
-        photo_file.file_path = destination_path
-        photo_file.associated_paths = renamed_associated_paths
+    return results
