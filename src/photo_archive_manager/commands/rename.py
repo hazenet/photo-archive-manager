@@ -18,6 +18,7 @@ def rename(args: argparse.Namespace) -> int:
         folder = choose_folder()
 
         if folder is None:
+            print("Operation cancelled.")
             return 1
 
     else:

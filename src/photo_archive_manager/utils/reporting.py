@@ -1,9 +1,17 @@
 """Functions for presenting information to the user."""
 
 from photo_archive_manager.models import (
+    RenameResult,
     RenameSession,
     RenameStatus,
 )
+
+
+def _destination_name(result: RenameResult) -> str:
+    """Return the destination filename for sorting."""
+
+    assert result.destination_path is not None
+    return result.destination_path.name
 
 
 def print_rename_session(
@@ -22,7 +30,7 @@ def print_rename_session(
     print(f"Dry Run  : {'Yes' if session.dry_run else 'No'}")
 
     if session.duration is not None:
-        print(f"Duration : {session.duration}")
+        print(f"Duration : {session.duration.total_seconds():.3f} s")
 
     print()
     print("Summary")
@@ -41,32 +49,70 @@ def print_rename_session(
             print(f"- {issue.message}")
 
     if not show_results:
+        print()
         return
 
-    print()
-    print("Results")
-    print("-------")
+    renamed_results = sorted(
+        (
+            result
+            for result in session.results
+            if (
+                result.status is RenameStatus.RENAMED
+                and result.destination_path is not None
+            )
+        ),
+        key=_destination_name,
+    )
 
-    for result in sorted(
-        session.results,
+    skipped_results = sorted(
+        (result for result in session.results if result.status is RenameStatus.SKIPPED),
         key=lambda result: result.original_path.name.lower(),
-    ):
-        match result.status:
-            case RenameStatus.RENAMED:
-                assert result.destination_path is not None
+    )
 
-                print(
-                    f"RENAMED  "
-                    f"{result.original_path.name} "
-                    f"-> "
-                    f"{result.destination_path.name}"
-                )
+    failed_results = sorted(
+        (result for result in session.results if result.status is RenameStatus.FAILED),
+        key=lambda result: result.original_path.name.lower(),
+    )
 
-            case RenameStatus.SKIPPED:
-                print(f"SKIPPED  {result.original_path.name}")
+    destination_name_width = max(
+        (
+            len(result.destination_path.name)
+            for result in renamed_results
+            if result.destination_path is not None
+        ),
+        default=0,
+    )
 
-            case RenameStatus.FAILED:
-                print(f"FAILED   {result.original_path.name}")
+    if renamed_results:
+        print()
+        print(f"Renamed ({len(renamed_results)})")
+        print("-------------")
 
-                if result.message:
-                    print(f"         {result.message}")
+        for result in renamed_results:
+            assert result.destination_path is not None
+
+            print(
+                f"{result.destination_path.name:<{destination_name_width}}"
+                f"  <-  "
+                f"{result.original_path.name}"
+            )
+
+    if skipped_results:
+        print()
+        print(f"Skipped ({len(skipped_results)})")
+        print("-------------")
+
+        for result in skipped_results:
+            print(result.original_path.name)
+
+    if failed_results:
+        print()
+        print(f"Failed ({len(failed_results)})")
+        print("------------")
+
+        for result in failed_results:
+            print(result.original_path.name)
+
+            if result.message:
+                print(f"    {result.message}")
+    print()
