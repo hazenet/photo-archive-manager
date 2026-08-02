@@ -21,6 +21,12 @@ def print_rename_session(
 ) -> None:
     """Print the results of a completed rename session."""
 
+    photo_count = session.processed_count
+    associated_file_count = sum(
+        len(result.photo.associated_paths) for result in session.results
+    )
+    filesystem_object_count = photo_count + associated_file_count
+
     print()
     print("Rename Session")
     print("==============")
@@ -35,10 +41,13 @@ def print_rename_session(
     print()
     print("Summary")
     print("-------")
-    print(f"Supported files : {session.processed_count}")
-    print(f"Renamed         : {session.renamed_count}")
-    print(f"Skipped         : {session.skipped_count}")
-    print(f"Failed          : {session.failed_count}")
+    print(f"Photo files        : {photo_count}")
+    print(f"Associated files   : {associated_file_count}")
+    print(f"Total files        : {filesystem_object_count}")
+    print()
+    print(f"Renamed photos     : {session.renamed_count}")
+    print(f"Skipped photos     : {session.skipped_count}")
+    print(f"Failed photos      : {session.failed_count}")
 
     if session.validation_issues:
         print()
@@ -115,4 +124,5 @@ def print_rename_session(
 
             if result.message:
                 print(f"    {result.message}")
+
     print()

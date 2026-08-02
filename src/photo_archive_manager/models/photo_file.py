@@ -55,3 +55,12 @@ class PhotoFile:
         """Return True if the file already follows PAM's naming convention."""
 
         return matches_renamed_pattern(self.file_path)
+
+    @property
+    def associated_destination_paths(self) -> list[Path]:
+        """Return the destination paths for associated files."""
+
+        return [
+            self.destination_path.with_suffix(path.suffix)
+            for path in self.associated_paths
+        ]

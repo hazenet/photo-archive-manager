@@ -20,13 +20,29 @@ def rename_files(
 
         try:
             if not dry_run:
+                #
+                # Rename the primary file.
+                #
+
                 original_path.rename(destination_path)
+
+                #
+                # Rename all associated files.
+                #
+
+                for source_path, destination_path_associated in zip(
+                    photo.associated_paths,
+                    photo.associated_destination_paths,
+                    strict=True,
+                ):
+                    source_path.rename(destination_path_associated)
 
                 #
                 # Keep the PhotoFile in sync with the filesystem.
                 #
 
                 photo.file_path = destination_path
+                photo.associated_paths = photo.associated_destination_paths
 
             results.append(
                 RenameResult(
