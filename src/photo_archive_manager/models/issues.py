@@ -9,5 +9,5 @@ from photo_archive_manager.models.photo_file import PhotoFile
 class ValidationIssue:
     """Represents a validation issue for a photo file."""
 
-    file: PhotoFile
+    photo_file: PhotoFile
     message: str

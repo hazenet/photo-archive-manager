@@ -15,12 +15,10 @@ def rename_files(
     results: list[RenameResult] = []
 
     for photo in photo_files:
-
-        original_path = photo.path
+        original_path = photo.file_path
         destination_path = photo.destination_path
 
         try:
-
             if not dry_run:
                 original_path.rename(destination_path)
 
@@ -28,7 +26,7 @@ def rename_files(
                 # Keep the PhotoFile in sync with the filesystem.
                 #
 
-                photo.path = destination_path
+                photo.file_path = destination_path
 
             results.append(
                 RenameResult(
@@ -39,8 +37,7 @@ def rename_files(
                 )
             )
 
-        except Exception as ex:
-
+        except OSError as ex:
             results.append(
                 RenameResult(
                     photo=photo,

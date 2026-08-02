@@ -1,7 +1,5 @@
 """Command-line interface entry point for Photo Archive Manager."""
 
-from __future__ import annotations
-
 import argparse
 
 from photo_archive_manager.commands.rename import rename
@@ -22,10 +20,31 @@ def build_parser() -> argparse.ArgumentParser:
     )
 
     rename_parser = subparsers.add_parser(
-        "rename",
-        help="Rename photo files.",
+        "rename", help="Rename supported photo and video files."
     )
-    rename_parser.set_defaults(func=rename)
+
+    rename_parser.add_argument(
+        "folder",
+        nargs="?",
+        metavar="FOLDER",
+        help="Folder containing the files to rename. If omitted, a folder picker is shown.",
+    )
+
+    rename_parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be renamed without modifying any files.",
+    )
+
+    rename_parser.add_argument(
+        "--show-results",
+        action="store_true",
+        help="Show the result for every processed file.",
+    )
+
+    rename_parser.set_defaults(
+        func=rename,
+    )
 
     return parser
 

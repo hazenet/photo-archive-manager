@@ -1,77 +1,72 @@
 """Functions for presenting information to the user."""
 
-from __future__ import annotations
-
-from collections.abc import Sequence
-
 from photo_archive_manager.models import (
-    PhotoFile,
-    ValidationIssue,
+    RenameSession,
+    RenameStatus,
 )
 
 
-def print_discovery_summary(
-    total_files: int,
-    already_renamed: int,
-    needs_rename: int,
+def print_rename_session(
+    session: RenameSession,
+    *,
+    show_results: bool = False,
 ) -> None:
-    """Print a summary of the discovered photo files."""
+    """Print the results of a completed rename session."""
 
     print()
-    print("Discovery Summary")
-    print("-----------------")
-    print(f"Total supported files : {total_files}")
-    print(f"Already renamed       : {already_renamed}")
-    print(f"Needs renaming        : {needs_rename}")
+    print("Rename Session")
+    print("==============")
     print()
 
+    print(f"Folder   : {session.folder}")
+    print(f"Dry Run  : {'Yes' if session.dry_run else 'No'}")
 
-def print_validation_issues(
-    issues: Sequence[ValidationIssue],
-) -> None:
-    """Print all validation issues."""
-
-    print()
-    print("Validation failed")
-    print("-----------------")
-
-    for issue in issues:
-        print(f"- {issue}")
+    if session.duration is not None:
+        print(f"Duration : {session.duration}")
 
     print()
-    print(f"{len(issues)} validation issue(s) found.")
-    print()
+    print("Summary")
+    print("-------")
+    print(f"Supported files : {session.processed_count}")
+    print(f"Renamed         : {session.renamed_count}")
+    print(f"Skipped         : {session.skipped_count}")
+    print(f"Failed          : {session.failed_count}")
 
+    if session.validation_issues:
+        print()
+        print("Validation Issues")
+        print("-----------------")
 
-def print_rename_preview(
-    photo_files: Sequence[PhotoFile],
-) -> None:
-    """Print the planned filename changes."""
+        for issue in session.validation_issues:
+            print(f"- {issue.message}")
 
-    print()
-    print("Rename Preview")
-    print("--------------")
-
-    for photo in photo_files:
-        if photo.new_filename is None:
-            continue
-
-        print(f"{photo.filename}  ->  {photo.new_filename}")
-
-    print()
-
-
-def print_completion_summary(
-    total_files: int,
-    already_renamed: int,
-    renamed: int,
-) -> None:
-    """Print a summary after renaming has completed."""
+    if not show_results:
+        return
 
     print()
-    print("Rename Complete")
-    print("---------------")
-    print(f"Total supported files : {total_files}")
-    print(f"Already renamed       : {already_renamed}")
-    print(f"Renamed               : {renamed}")
-    print()
+    print("Results")
+    print("-------")
+
+    for result in sorted(
+        session.results,
+        key=lambda result: result.original_path.name.lower(),
+    ):
+        match result.status:
+            case RenameStatus.RENAMED:
+                assert result.destination_path is not None
+
+                print(
+                    f"RENAMED  "
+                    f"{result.original_path.name} "
+                    f"-> "
+                    f"{result.destination_path.name}"
+                )
+
+            case RenameStatus.SKIPPED:
+                print(f"SKIPPED  {result.original_path.name}")
+
+            case RenameStatus.FAILED:
+                print(f"FAILED   {result.original_path.name}")
+
+                if result.message:
+                    print(f"         {result.message}")

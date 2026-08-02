@@ -1,71 +1,49 @@
 """Rename photo files in a selected folder."""
 
+import argparse
+from pathlib import Path
+
 from photo_archive_manager.core.dependencies import check_dependencies
-from photo_archive_manager.core.discovery import (
-    find_supported_files,
-    split_files_by_rename_status,
-)
-from photo_archive_manager.core.exif import read_capture_datetimes
-from photo_archive_manager.core.filesystem import rename_files
-from photo_archive_manager.core.planning_rename import (
-    assign_sequence_numbers,
-    generate_new_filenames,
-    group_files_by_timestamp,
-)
-from photo_archive_manager.core.validation_rename import validate_renames
+from photo_archive_manager.services.renamer import rename_folder
 from photo_archive_manager.utils.dialogs import choose_folder
-from photo_archive_manager.utils.reporting import (
-    print_completion_summary,
-    print_discovery_summary,
-    print_rename_preview,
-    print_validation_issues,
-)
+from photo_archive_manager.utils.reporting import print_rename_session
 
 
-def rename() -> int:
+def rename(args: argparse.Namespace) -> int:
     """Run the rename command."""
 
     check_dependencies()
 
-    folder = choose_folder()
-    if folder is None:
+    if args.folder is None:
+        folder = choose_folder()
+
+        if folder is None:
+            return 1
+
+    else:
+        folder = Path(args.folder)
+
+    folder = folder.expanduser().resolve()
+
+    if not folder.exists():
+        print(f"Error: '{folder}' does not exist.")
         return 1
 
-    photo_files = find_supported_files(folder)
-
-    already_renamed, needs_rename = split_files_by_rename_status(photo_files)
-
-    print_discovery_summary(
-        total_files=len(photo_files),
-        already_renamed=len(already_renamed),
-        needs_rename=len(needs_rename),
-    )
-
-    if not needs_rename:
-        return 0
-
-    read_capture_datetimes(needs_rename)
-
-    grouped = group_files_by_timestamp(needs_rename)
-
-    assign_sequence_numbers(grouped)
-
-    generate_new_filenames(needs_rename)
-
-    issues = validate_renames(needs_rename)
-
-    if issues:
-        print_validation_issues(issues)
+    if not folder.is_dir():
+        print(f"Error: '{folder}' is not a directory.")
         return 1
 
-    print_rename_preview(needs_rename)
-
-    rename_files(needs_rename)
-
-    print_completion_summary(
-        total_files=len(photo_files),
-        already_renamed=len(already_renamed),
-        renamed=len(needs_rename),
+    session = rename_folder(
+        folder,
+        dry_run=args.dry_run,
     )
+
+    print_rename_session(
+        session,
+        show_results=args.show_results,
+    )
+
+    if session.validation_issues:
+        return 1
 
     return 0

@@ -18,5 +18,6 @@ pam = "photo_archive_manager.cli:main"
 
 [tool.ruff.lint]
 ignore = [
+    "DTZ005",
     "DTZ007",
 ]

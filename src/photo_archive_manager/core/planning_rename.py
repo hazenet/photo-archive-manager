@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from photo_archive_manager.constants import (
+from photo_archive_manager.core.constants import (
     FILENAME_FORMAT,
     FILENAME_FORMAT_NO_ORIGINAL,
 )

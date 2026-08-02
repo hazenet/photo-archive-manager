@@ -32,16 +32,16 @@ class RenameSession:
     """Represents a single folder rename operation."""
 
     #
-    # Configuration
-    #
-
-    dry_run: bool = False
-
-    #
     # Input
     #
 
     folder: Path
+
+    #
+    # Configuration
+    #
+
+    dry_run: bool = False
 
     #
     # Timing
@@ -118,17 +118,17 @@ class ImportSession:
     """Represents a single folder import operation."""
 
     #
-    # Configuration
-    #
-
-    dry_run: bool = False
-
-    #
     # Input
     #
 
     source_folder: Path
     destination_folder: Path
+
+    #
+    # Configuration
+    #
+
+    dry_run: bool = False
 
     #
     # Timing

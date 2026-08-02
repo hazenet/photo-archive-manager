@@ -1,8 +1,9 @@
 import json
 import subprocess
 from datetime import datetime
+from typing import cast
 
-from photo_archive_manager.constants import TIMESTAMP_FIELDS
+from photo_archive_manager.core.constants import TIMESTAMP_FIELDS
 from photo_archive_manager.models import PhotoFile
 
 
@@ -30,7 +31,10 @@ def _get_exif_json(
         check=True,
     )
 
-    return json.loads(result.stdout)
+    return cast(
+        list[dict[str, object]],
+        json.loads(result.stdout),
+    )
 
 
 def read_capture_datetimes(photo_files: list[PhotoFile]) -> None:
@@ -46,7 +50,7 @@ def read_capture_datetimes(photo_files: list[PhotoFile]) -> None:
         for field_name in TIMESTAMP_FIELDS:
             timestamp_string = exif_data.get(field_name)
 
-            if timestamp_string is None:
+            if not isinstance(timestamp_string, str):
                 continue
 
             timestamp_string = timestamp_string[:19]

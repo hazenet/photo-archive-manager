@@ -1,6 +1,7 @@
 """Shared constants used throughout Photo Archive Manager."""
 
 import re
+from pathlib import Path
 
 # ---------------------------------------------------------------------------
 # Supported media types
@@ -66,6 +67,13 @@ RENAMED_PATTERN = re.compile(
     r"(?P<sequence>\d{3}).*\.[^.]+$",
     re.IGNORECASE,
 )
+
+
+def matches_renamed_pattern(file_path: Path) -> bool:
+    """Return True if the filename already follows our naming convention."""
+
+    return bool(RENAMED_PATTERN.match(file_path.name))
+
 
 EXCLUDE_ORIGINAL_FILENAME_PATTERNS = (
     # Dropbox date-based format, e.g. 2026-07-20 15.38.58.jpg

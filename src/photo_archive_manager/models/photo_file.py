@@ -2,6 +2,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 
+from photo_archive_manager.core.constants import matches_renamed_pattern
+
 
 @dataclass(slots=True)
 class PhotoFile:
@@ -47,3 +49,9 @@ class PhotoFile:
     def suffix(self) -> str:
         """Return the original filename extension."""
         return self.file_path.suffix
+
+    @property
+    def is_renamed(self) -> bool:
+        """Return True if the file already follows PAM's naming convention."""
+
+        return matches_renamed_pattern(self.file_path)

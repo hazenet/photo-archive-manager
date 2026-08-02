@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 
-from photo_archive_manager.constants import (
+from photo_archive_manager.core.constants import (
     ASSOCIATED_EXTENSIONS,
     EXCLUDE_ORIGINAL_FILENAME_PATTERNS,
     RENAMED_PATTERN,
@@ -14,12 +14,6 @@ def is_supported_file(file_path: Path) -> bool:
     """Return True if the file type is supported."""
 
     return file_path.is_file() and file_path.suffix.lower() in SUPPORTED_EXTENSIONS
-
-
-def is_already_renamed(file_path: Path) -> bool:
-    """Return True if the filename already follows our naming convention."""
-
-    return bool(RENAMED_PATTERN.match(file_path.name))
 
 
 def find_associated_files(
@@ -60,7 +54,7 @@ def find_supported_files(
     return supported_files
 
 
-def read_existing_sequences(
+def build_existing_sequences(
     photo_files: list[PhotoFile],
 ) -> dict[datetime, int]:
     """Read the highest sequence number already used for each timestamp."""
@@ -103,20 +97,3 @@ def should_include_original_filename(
     return not any(
         pattern.match(stem) for pattern in EXCLUDE_ORIGINAL_FILENAME_PATTERNS
     )
-
-
-def split_files_by_rename_status(
-    supported_files: list[PhotoFile],
-) -> tuple[list[PhotoFile], list[PhotoFile]]:
-    """Split files into already renamed and files needing rename."""
-
-    already_renamed: list[PhotoFile] = []
-    needs_rename: list[PhotoFile] = []
-
-    for photo_file in supported_files:
-        if is_already_renamed(photo_file.file_path):
-            already_renamed.append(photo_file)
-        else:
-            needs_rename.append(photo_file)
-
-    return already_renamed, needs_rename
